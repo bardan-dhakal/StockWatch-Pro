@@ -14,5 +14,6 @@ namespace api.Models
         public long MarketCap { get; set; }
         public List<Comment> Comments { get; set; } = [];
         public List<Portfolio> Portfolios { get; set; } = [];
+        public List<PriceAlert> PriceAlerts { get; set; } = [];
     }
 }

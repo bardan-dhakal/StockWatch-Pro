@@ -11,6 +11,7 @@ namespace api.Data
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
+        public DbSet<PriceAlert> PriceAlerts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -28,6 +29,16 @@ namespace api.Data
                 .HasOne(p => p.Stock)
                 .WithMany(s => s.Portfolios)
                 .HasForeignKey(p => p.StockId);
+                
+            builder.Entity<PriceAlert>()
+                .HasOne(pa => pa.AppUser)
+                .WithMany(u => u.PriceAlerts)
+                .HasForeignKey(pa => pa.AppUserId);
+                
+            builder.Entity<PriceAlert>()
+                .HasOne(pa => pa.Stock)
+                .WithMany(s => s.PriceAlerts)
+                .HasForeignKey(pa => pa.StockId);
                 
             List<IdentityRole> roles =
             [
