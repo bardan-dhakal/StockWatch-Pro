@@ -96,6 +96,11 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
 builder.Services.AddScoped<IRegisterRepository, RegisterRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPriceAlertRepository, PriceAlertRepository>();
+builder.Services.AddScoped<IStockPriceService, StockPriceService>();
+
+// Add HttpClient for external API calls
+builder.Services.AddHttpClient<IStockPriceService, StockPriceService>();
 
 var app = builder.Build();
 

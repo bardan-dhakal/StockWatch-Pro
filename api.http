@@ -1,6 +1,182 @@
 @api_HostAddress = http://localhost:5110
+@authToken = your_jwt_token_here
 
-GET {{api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Authentication ###
+
+# Register new user
+POST {{api_HostAddress}}/api/Account/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "TestPass123!"
+}
+
+###
+
+# Login user
+POST {{api_HostAddress}}/api/Account/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "TestPass123!"
+}
+
+###
+
+### Stocks ###
+
+# Get all stocks
+GET {{api_HostAddress}}/api/Stock
+Authorization: Bearer {{authToken}}
+
+###
+
+# Get stock by ID
+GET {{api_HostAddress}}/api/Stock/1
+Authorization: Bearer {{authToken}}
+
+###
+
+# Create new stock
+POST {{api_HostAddress}}/api/Stock
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "companyName": "Apple Inc.",
+  "purchase": 150.00,
+  "lastDiv": 0.88,
+  "industry": "Technology",
+  "marketCap": 2500000000000
+}
+
+###
+
+# Update stock
+PUT {{api_HostAddress}}/api/Stock/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "companyName": "Apple Inc.",
+  "purchase": 155.00,
+  "lastDiv": 0.88,
+  "industry": "Technology",
+  "marketCap": 2500000000000
+}
+
+###
+
+# Delete stock
+DELETE {{api_HostAddress}}/api/Stock/1
+Authorization: Bearer {{authToken}}
+
+###
+
+### Portfolio ###
+
+# Get user's portfolio
+GET {{api_HostAddress}}/api/Portfolio
+Authorization: Bearer {{authToken}}
+
+###
+
+# Add stock to portfolio
+POST {{api_HostAddress}}/api/Portfolio/1
+Authorization: Bearer {{authToken}}
+
+###
+
+# Remove stock from portfolio
+DELETE {{api_HostAddress}}/api/Portfolio/1
+Authorization: Bearer {{authToken}}
+
+###
+
+### Comments ###
+
+# Get all comments
+GET {{api_HostAddress}}/api/Comment
+Authorization: Bearer {{authToken}}
+
+###
+
+# Get comment by ID
+GET {{api_HostAddress}}/api/Comment/1
+Authorization: Bearer {{authToken}}
+
+###
+
+# Add comment to stock
+POST {{api_HostAddress}}/api/Comment/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Great stock!",
+  "content": "This is a solid investment with good fundamentals."
+}
+
+###
+
+# Update comment
+PUT {{api_HostAddress}}/api/Comment/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Updated title",
+  "content": "Updated content"
+}
+
+###
+
+# Delete comment
+DELETE {{api_HostAddress}}/api/Comment/1
+Authorization: Bearer {{authToken}}
+
+###
+
+### Price Alerts ###
+
+# Get user's price alerts
+GET {{api_HostAddress}}/api/PriceAlert
+Authorization: Bearer {{authToken}}
+
+###
+
+# Get specific price alert
+GET {{api_HostAddress}}/api/PriceAlert/1
+Authorization: Bearer {{authToken}}
+
+###
+
+# Create new price alert
+POST {{api_HostAddress}}/api/PriceAlert
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "stockId": 1,
+  "targetPrice": 160.00,
+  "alertType": 0
+}
+
+###
+
+# Toggle alert active status
+PUT {{api_HostAddress}}/api/PriceAlert/1/toggle
+Authorization: Bearer {{authToken}}
+
+###
+
+# Delete price alert
+DELETE {{api_HostAddress}}/api/PriceAlert/1
+Authorization: Bearer {{authToken}}
 
 ###
