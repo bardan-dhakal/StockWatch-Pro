@@ -12,7 +12,7 @@ namespace api.Models
             return new GenericResponse<T>(data, true, message);
         }
 
-        public static GenericResponse<T?> Failure(string message)
+        public static GenericResponse<T?> Failure(string message) // T? generic type T could be null
         {
             return new GenericResponse<T?>(default, false, message);
         }

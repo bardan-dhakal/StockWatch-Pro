@@ -7,14 +7,14 @@ namespace api.Models
     {
         public int Id { get; set; }
         
-        [Required]
+        [Required] // validation rule for the respective property
         public string AppUserId { get; set; } = string.Empty;
         
         [Required]
         public int StockId { get; set; }
         
         [Required]
-        [Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "decimal(18,2)")] // precise configuration of the TargetPrice column in the database
         public decimal TargetPrice { get; set; }
         
         [Required]
