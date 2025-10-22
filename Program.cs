@@ -25,9 +25,9 @@ builder.Services.AddCors(options =>
 );
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers();  //Enable API controllers
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();  //Enable Swagger for API documentation
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -62,7 +62,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")));  //Entity Framework set up for PostgreSQL database
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
@@ -115,9 +115,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAllOrigins");
 
-app.UseAuthentication();
-app.UseAuthorization();
+//ASP.NET Core Middleware Pipeline
+app.UseAuthentication(); // jwt auth
+app.UseAuthorization(); // role-based authorization
 
-app.MapControllers();
+app.MapControllers(); // URL routing to controllers
 
 app.Run();
