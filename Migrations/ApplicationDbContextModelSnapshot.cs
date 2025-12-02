@@ -50,13 +50,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "37904903-c3b8-4ce1-8433-72d24878a756",
+                            Id = "b5086321-0392-4dc4-a813-2b5074f9abf1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8c87f4e3-9014-49ec-b601-e154577da38d",
+                            Id = "b5f733d6-b94f-4ecd-8f68-ae7fc225e691",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -276,6 +276,45 @@ namespace api.Migrations
                     b.ToTable("Portfolios");
                 });
 
+            modelBuilder.Entity("api.Models.PriceAlert", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AlertType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("TargetPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("TriggeredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("PriceAlerts");
+                });
+
             modelBuilder.Entity("api.Models.Stock", b =>
                 {
                     b.Property<int>("Id")
@@ -391,9 +430,30 @@ namespace api.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("api.Models.PriceAlert", b =>
+                {
+                    b.HasOne("api.Models.AppUser", "AppUser")
+                        .WithMany("PriceAlerts")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("api.Models.Stock", "Stock")
+                        .WithMany("PriceAlerts")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Stock");
+                });
+
             modelBuilder.Entity("api.Models.AppUser", b =>
                 {
                     b.Navigation("Portfolios");
+
+                    b.Navigation("PriceAlerts");
                 });
 
             modelBuilder.Entity("api.Models.Stock", b =>
@@ -401,6 +461,8 @@ namespace api.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Portfolios");
+
+                    b.Navigation("PriceAlerts");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="01-create-users-table" author="migration">
+        <createTable tableName="users">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="idx_users_username" tableName="users" unique="true">
+            <column name="username"/>
+        </createIndex>
+        <createIndex indexName="idx_users_email" tableName="users" unique="true">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="02-create-user-roles-table" author="migration">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_user_roles_user_id"/>
+        <createIndex indexName="idx_user_roles_user_id" tableName="user_roles">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="03-create-stocks-table" author="migration">
+        <createTable tableName="stocks">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="symbol" type="varchar(10)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="company_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="purchase" type="numeric(18,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_div" type="numeric(18,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="industry" type="varchar(100)"/>
+            <column name="market_cap" type="bigint"/>
+        </createTable>
+        <createIndex indexName="idx_symbol" tableName="stocks" unique="true">
+            <column name="symbol"/>
+        </createIndex>
+        <createIndex indexName="idx_company_name" tableName="stocks">
+            <column name="company_name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="04-create-portfolios-table" author="migration">
+        <createTable tableName="portfolios">
+            <column name="app_user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stock_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="portfolios" columnNames="app_user_id,stock_id"
+                       constraintName="pk_portfolios"/>
+        <addForeignKeyConstraint baseTableName="portfolios" baseColumnNames="app_user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_portfolios_user_id"/>
+        <addForeignKeyConstraint baseTableName="portfolios" baseColumnNames="stock_id"
+                                 referencedTableName="stocks" referencedColumnNames="id"
+                                 constraintName="fk_portfolios_stock_id"/>
+    </changeSet>
+
+    <changeSet id="05-create-comments-table" author="migration">
+        <createTable tableName="comments">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="text"/>
+            <column name="created_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stock_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="comments" baseColumnNames="stock_id"
+                                 referencedTableName="stocks" referencedColumnNames="id"
+                                 constraintName="fk_comments_stock_id"/>
+        <createIndex indexName="idx_comments_stock_id" tableName="comments">
+            <column name="stock_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
