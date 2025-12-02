@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="06-create-price-alerts-table" author="migration">
+        <createTable tableName="price_alerts">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="app_user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stock_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target_price" type="numeric(18,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alert_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="triggered_at" type="timestamp"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="price_alerts" baseColumnNames="app_user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_price_alerts_user_id"/>
+        <addForeignKeyConstraint baseTableName="price_alerts" baseColumnNames="stock_id"
+                                 referencedTableName="stocks" referencedColumnNames="id"
+                                 constraintName="fk_price_alerts_stock_id"/>
+
+        <createIndex indexName="idx_price_alerts_user_id" tableName="price_alerts">
+            <column name="app_user_id"/>
+        </createIndex>
+        <createIndex indexName="idx_price_alerts_stock_id" tableName="price_alerts">
+            <column name="stock_id"/>
+        </createIndex>
+        <createIndex indexName="idx_price_alerts_is_active" tableName="price_alerts">
+            <column name="is_active"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

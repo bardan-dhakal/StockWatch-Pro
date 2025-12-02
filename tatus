@@ -1,0 +1,2 @@
+[33me2906d4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Add PriceAlert model and database relationships for stock price monitoring
+[33m861ca5a[m Initial commit: Stock Management Web API with JWT authentication, PostgreSQL database, and portfolio management features
